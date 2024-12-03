@@ -10,25 +10,54 @@
     
     <label for="password">Master Password:</label>
     <input type="password" id="password" name="password" required>
+    <button type="button" onclick="generatePassword()">Generate Password</button>
     
     <label for="confirm_password">Confirm Password:</label>
     <input type="password" id="confirm_password" name="confirm_password" required>
     
     <label for="security_question_1">Security Question 1:</label>
-    <input type="text" id="security_question_1" name="security_question_1" required>
+    <select id="security_question_1" name="security_question_1" required>
+        <option value="">Select a question</option>
+        {% for question in security_questions %}
+            <option value="{{ question }}">{{ question }}</option>
+        {% endfor %}
+    </select>
     <input type="text" id="security_answer_1" name="security_answer_1" required>
     
     <label for="security_question_2">Security Question 2:</label>
-    <input type="text" id="security_question_2" name="security_question_2" required>
+    <select id="security_question_2" name="security_question_2" required>
+        <option value="">Select a question</option>
+        {% for question in security_questions %}
+            <option value="{{ question }}">{{ question }}</option>
+        {% endfor %}
+    </select>
     <input type="text" id="security_answer_2" name="security_answer_2" required>
     
     <label for="security_question_3">Security Question 3:</label>
-    <input type="text" id="security_question_3" name="security_question_3" required>
+    <select id="security_question_3" name="security_question_3" required>
+        <option value="">Select a question</option>
+        {% for question in security_questions %}
+            <option value="{{ question }}">{{ question }}</option>
+        {% endfor %}
+    </select>
     <input type="text" id="security_answer_3" name="security_answer_3" required>
     
     <button type="submit">Register</button>
 </form>
+
 {% if error %}
 <p class="error">{{ error }}</p>
 {% endif %}
+
+<script>
+function generatePassword() {
+    fetch('/generate_password')  // Call the password generation route
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('password').value = data.password;  // Set the generated password
+        })
+        .catch(error => console.error('Error:', error));
+}
+</script>
 {% endblock %}
+

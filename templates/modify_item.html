@@ -1,0 +1,41 @@
+<h1>Modify Item</h1>
+
+<form method="POST">
+    <label for="name">Name:</label>
+    <input type="text" name="name" value="{{ item.name }}" required>
+    
+    <label for="item_type">Type:</label>
+    <select name="item_type" required>
+        <option value="Login" {% if item.item_type == 'Login' %}selected{% endif %}>Login</option>
+        <option value="Credit Card" {% if item.item_type == 'Credit Card' %}selected{% endif %}>Credit Card</option>
+        <option value="Secure Note" {% if item.item_type == 'Secure Note' %}selected{% endif %}>Secure Note</option>
+    </select>
+
+    <label for="detail_key">Details:</label>
+    <div id="details">
+        {% for detail in item.details %}
+            <input type="text" name="detail_key" value="{{ detail.key }}" placeholder="Key">
+            <input type="text" name="detail_value" value="{{ detail.value }}" placeholder="Value">
+        {% endfor %}
+    </div>
+    <button type="button" onclick="addDetail()">Add Another Detail</button>
+    <button type="submit">Save Changes</button>
+</form>
+
+<script>
+function addDetail() {
+    const detailDiv = document.getElementById('details');
+    const keyInput = document.createElement('input');
+    keyInput.type = 'text';
+    keyInput.name = 'detail_key';
+    keyInput.placeholder = 'Key';
+
+    const valueInput = document.createElement('input');
+    valueInput.type = 'text';
+    valueInput.name = 'detail_value';
+    valueInput.placeholder = 'Value';
+
+    detailDiv.appendChild(keyInput);
+    detailDiv.appendChild(valueInput);
+}
+</script>

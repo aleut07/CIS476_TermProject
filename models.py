@@ -32,6 +32,7 @@ class SecurityQuestion(db.Model):
     def check_answer(self, answer):
         return check_password_hash(self.answer_hash, answer)
 
+
 class VaultItem(db.Model):
     __tablename__ = 'vault_items'
     id = db.Column(db.Integer, primary_key=True)
