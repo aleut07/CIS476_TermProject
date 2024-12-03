@@ -1,28 +1,33 @@
 # Master Password Recovery using Chain of Responsibility
-class Handler:
-    def __init__(self, successor=None):
-        self.successor = successor
+class RecoveryStep:
+    def __init__(self, next_step=None):
+        self.next_step = next_step
 
-    def handle(self, request):
-        if self.successor:
-            return self.successor.handle(request)
+    def handle(self, user_input):
+        if self.next_step:
+            return self.next_step.handle(user_input)
+        return False
 
-class SecurityQuestionHandler(Handler):
-    def __init__(self, question, answer, successor=None):
-        super().__init__(successor)
+
+class SecurityQuestionStep(RecoveryStep):
+    def __init__(self, question, expected_answer, next_step=None):
+        super().__init__(next_step)
         self.question = question
-        self.answer = answer
+        self.expected_answer = expected_answer
 
-    def handle(self, request):
-        user_answer = request.get(self.question)
-        if user_answer == self.answer:
-            return super().handle(request)
-        else:
-            return False  # Terminate chain
+    def handle(self, user_input):
+        if user_input.get(self.question) != self.expected_answer:
+            return False
+        return super().handle(user_input)
 
-# Build chain
-def create_recovery_chain(questions_answers):
-    chain = None
-    for question, answer in reversed(questions_answers):
-        chain = SecurityQuestionHandler(question, answer, chain)
-    return chain
+
+class RecoveryHandler:
+    def __init__(self, user_security_questions):
+        self.chain = None
+        for question, answer in reversed(user_security_questions):
+            self.chain = SecurityQuestionStep(question, answer, self.chain)
+
+    def recover(self, user_input):
+        if self.chain.handle(user_input):
+            return "Recovery Successful"
+        return "Recovery Failed"

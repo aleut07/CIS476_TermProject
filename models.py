@@ -9,13 +9,13 @@ class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    master_password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
     security_questions = db.relationship('SecurityQuestion', backref='user', lazy=True)
 
-    def set_master_password(self, password):
+    def set_password(self, password):
         self.master_password_hash = generate_password_hash(password)
 
-    def check_master_password(self, password):
+    def check_password(self, password):
         return check_password_hash(self.master_password_hash, password)
 
 class SecurityQuestion(db.Model):
