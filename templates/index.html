@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<h1>Welcome to MyPass</h1>
+<p>Your secure password manager.</p>
+{% if not session.get('user_id') %}
+    <a href="{{ url_for('register') }}" class="button">Get Started</a>
+{% else %}
+    <a href="{{ url_for('vault') }}" class="button">Go to Vault</a>
+{% endif %}
+{% endblock %}
