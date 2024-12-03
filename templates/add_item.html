@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Add Vault Item{% endblock %}
+
+{% block content %}
+<h2>Add Vault Item</h2>
+<form method="POST" action="{{ url_for('add_item') }}">
+    
+
+    <label for="item_type">Item Type:</label>
+    <select id="item_type" name="item_type" required>
+        <option value="login">Login</option>
+        <option value="credit_card">Credit Card</option>
+        <option value="secure_note">Secure Note</option>
+    </select>
+
+    <h3>Details</h3>
+    <div id="details">
+        <div class="detail">
+            <label>Key:</label>
+            <input type="text" name="detail_key" required>
+            <label>Value:</label>
+            <input type="text" name="detail_value" required>
+        </div>
+    </div>
+    <button type="button" onclick="addDetail()">Add More Details</button>
+
+    <button type="submit">Add Item</button>
+</form>
+
+<script>
+    function addDetail() {
+        const detailsDiv = document.getElementById('details');
+        const newDetail = document.createElement('div');
+        newDetail.classList.add('detail');
+        newDetail.innerHTML = `
+            <label>Key:</label>
+            <input type="text" name="detail_key" required>
+            <label>Value:</label>
+            <input type="text" name="detail_value" required>
+        `;
+        detailsDiv.appendChild(newDetail);
+    }
+</script>
+{% endblock %}

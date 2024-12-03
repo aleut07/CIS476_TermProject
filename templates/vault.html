@@ -3,12 +3,13 @@
 {% block title %}Vault{% endblock %}
 
 {% block content %}
-<h1>Vault</h1>
+<h2>Your Vault</h2>
 <a href="{{ url_for('generate_password') }}" class="button">Generate Password</a>
+<a href="{{ url_for('add_item') }}" class="button">Add Item</a>
 <table>
     <thead>
         <tr>
-            <th>Name</th>
+            <th>Title</th>
             <th>Type</th>
             <th>Actions</th>
         </tr>
@@ -16,10 +17,9 @@
     <tbody>
         {% for item in vault_items %}
         <tr>
-            <td>{{ item.name }}</td>
+            <td>{{ item.title }}</td>
             <td>{{ item.item_type }}</td>
             <td>
-                <a href="{{ url_for('view_item', item_id=item.id) }}">View</a>
                 <a href="{{ url_for('edit_item', item_id=item.id) }}">Edit</a>
                 <a href="{{ url_for('delete_item', item_id=item.id) }}" onclick="return confirm('Are you sure?')">Delete</a>
             </td>

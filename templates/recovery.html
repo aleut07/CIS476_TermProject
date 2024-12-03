@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Recover Password{% endblock %}
+
+{% block content %}
+<h2>Recover Your Account</h2>
+<form method="POST" action="{{ url_for('recovery') }}">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="answer1">Security Question 1:</label>
+    <input type="text" id="answer1" name="answer1" required>
+
+    <label for="answer2">Security Question 2:</label>
+    <input type="text" id="answer2" name="answer2" required>
+
+    <label for="answer3">Security Question 3:</label>
+    <input type="text" id="answer3" name="answer3" required>
+
+    <button type="submit">Recover</button>
+</form>
+{% endblock %}

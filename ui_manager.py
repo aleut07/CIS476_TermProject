@@ -1,4 +1,7 @@
 # UI Component Communication using Mediator Pattern
+from flask import render_template
+
+
 class UIManager:
     def __init__(self):
         self.components = {}
@@ -47,6 +50,10 @@ class UIManager:
         :param password: The copied password
         """
         print(f"UIManager: Password for '{item.name}' was copied to clipboard.")
+
+    def render_vault(self, vault_items):
+        return render_template('vault.html', items=vault_items)
+        
 
 class UIComponent:
     def __init__(self, name):

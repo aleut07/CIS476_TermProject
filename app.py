@@ -1,3 +1,4 @@
+from os import name
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 from auth import UserSession
 from notifications import NotificationManager
@@ -11,7 +12,7 @@ from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 app.secret_key = "secretkey"  
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mypass.db'  # Using SQLite
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CIS476_TermProject.db'  # Using SQLite
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Suppress warnings
 db.init_app(app)
 
@@ -156,6 +157,47 @@ def recovery():
             return redirect(url_for('recovery'))
 
     return render_template('recovery.html')
+
+@app.route('/logout')
+def logout():
+    return render_template('index.html')
+
+@app.route('/add_item', methods=['GET', 'POST'])
+def add_item():
+    if 'user_id' not in session:
+        flash("Please log in to add items to your vault.", "danger")
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    name = request.form.get('name')
+    item_type = request.form.get('item_type')
+    detail_keys = request.form.get('detail_keys')
+
+    if not detail_keys:
+        flash("Detail is required", "danger")
+        return render_template('add_item.html')
+    if not item_type:
+        flash("Detail Values required", "danger")
+        
+    # Create a new VaultItem
+    user_id = session['user_id']
+    new_item = VaultItem(user_id=user_id, name=name, item_type=item_type)
+    db.session.add(new_item)
+    db.session.commit()
+
+    # Add details to VaultDetail
+    for key, value in zip(item_type, detail_keys):
+        if key and value:  # Ensure valid key-value pairs
+            detail = VaultDetail(vault_item_id=new_item.id, key=key, value=value)
+            db.session.add(detail)
+
+    db.session.commit()
+    flash("Item added successfully!", "success")
+    return redirect(url_for('vault'))
+
+    # Render the add_item form for GET requests
+    return render_template('add_item.html')
+
     
 
 if __name__ == '__main__':
